@@ -1,0 +1,6 @@
+---
+- name: restart service
+  service:
+    name: "{{ dropwizard_service_name }}"
+    state: restarted
+  when: dropwizard_service_enabled

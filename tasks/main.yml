@@ -1,0 +1,74 @@
+---
+- name: Install daemonize package
+  yum:
+     name: daemonize.x86_64
+     state: present
+
+- name: Ensure service group is created
+  group:
+    name: "{{ dropwizard_service_group_name }}"
+    state: present
+
+- name: Ensure service user is created
+  user:
+    name: "{{ dropwizard_service_user_name }}"
+    state: present
+
+- name: Ensure service directory is created
+  file:
+    path: /opt/{{ dropwizard_service_name }}
+    state: directory
+    owner: "{{ dropwizard_service_user_name }}"
+    group: "{{ dropwizard_service_group_name }}"
+    mode: 0755
+
+- name: Ensure log directory is created
+  file:
+    path: /var/log/{{ dropwizard_service_name }}
+    state: directory
+    owner: "{{ dropwizard_service_user_name }}"
+    group: "{{ dropwizard_service_group_name }}"
+    mode: 0755
+
+- name: Copy jar file to proper location
+  copy:
+    src: "{{ dropwizard_service_jar_origin_path }}"
+    dest: "{{ dropwizard_service_jar_target_path }}"
+    owner: "{{ dropwizard_service_user_name }}"
+    group: "{{ dropwizard_service_group_name }}"
+    mode: 0640
+
+- name: Ensure config directory is created
+  file:
+    path: "{{ dropwizard_service_config_path }}"
+    state: directory
+    owner: "{{ dropwizard_service_user_name }}"
+    group: "{{ dropwizard_service_group_name }}"
+    mode: 0755
+
+- name: Ensure service configuration is created
+  template:
+    src: "{{ dropwizard_service_config_source }}"
+    dest: "{{ dropwizard_service_config_path }}/{{dropwizard_service_config_file}}"
+    owner: "{{ dropwizard_service_user_name }}"
+    group: "{{ dropwizard_service_group_name }}"
+    mode: 0640
+  notify: restart service
+  when: dropwizard_service_enabled and dropwizard_service_config_source is defined
+
+- name: Ensure service init script is created
+  template:
+    src: "{{ dropwizard_service_init_config_source }}"
+    dest: "{{ dropwizard_service_init_path }}"
+    owner: "{{ dropwizard_service_user_name }}"
+    group: "{{ dropwizard_service_group_name }}"
+    mode: 0755
+  notify: restart service
+  when: dropwizard_service_enabled and dropwizard_service_init_config_source is defined
+
+- name: Ensure service is running and enabled at boot
+  service:
+    name: "{{ dropwizard_service_name }}"
+    state: started
+    enabled: yes
+  when: dropwizard_service_enabled and dropwizard_service_check

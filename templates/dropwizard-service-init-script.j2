@@ -1,0 +1,84 @@
+#!/bin/bash
+# Dropwizard service
+#
+# chkconfig: 2345 80 30
+# description: Generic script for a dropwizard service (java)
+
+. /etc/init.d/functions
+
+app_name="$( basename $( readlink -f $0 ))"
+
+####
+CONFIG_FILE="/etc/${app_name}/${app_name}.yml"
+JAR_FILE="/opt/${app_name}/${app_name}.jar"
+JAVA_RUNTIME='/usr/bin/java'
+RETVAL=0
+OWNER={{ dropwizard_service_user_name }}
+#####
+
+if [ -f /etc/sysconfig/$app_name ] ; then
+    . /etc/sysconfig/$app_name
+fi
+
+pid_file="/var/run/${app_name}.pid"
+lockfile="/var/lock/subsys/${app_name}"
+startup_log="/var/log/${app_name}/startup.log"
+prog="${JAVA_RUNTIME} {{ dropwizard_service_java_opts }} -jar ${JAR_FILE} server ${CONFIG_FILE}"
+
+start() {
+  umask 022
+  echo -n $"Starting ${app_name}: "
+  daemon --pidfile="$pid_file" "/usr/sbin/daemonize -p $pid_file -u $OWNER -o $startup_log -e $startup_log $prog"
+  RETVAL=$?
+  echo
+  [ $RETVAL -eq 0 ] && touch $lockfile
+  return $RETVAL
+}
+
+stop() {
+  echo -n $"Shutting down ${app_name}: "
+  killproc -p "$pid_file" ${JAVA_RUNTIME}
+  RETVAL=$?
+  echo
+  [ $RETVAL -eq 0 ] && rm -f $lockfile
+  return $RETVAL
+}
+
+restart() {
+  stop
+  start
+}
+
+status_func() {
+  status -p "$pid_file" -l $app_name ${JAVA_RUNTIME}
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  reload)
+    exit 3
+  ;;
+  force-reload)
+    exit 3
+  ;;
+  restart)
+    restart
+  ;;
+  status)
+    status_func
+  ;;
+  condrestart|try-restart)
+    status_func >/dev/null 2>&1 || exit 0
+    restart
+  ;;
+  *)
+    echo "Usage $0 {start|stop|restart|status|condrestart|try-restart}"
+    exit 0
+  ;;
+esac
+exit $?

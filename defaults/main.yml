@@ -1,0 +1,11 @@
+---
+dropwizard_service_user_name: "{{ dropwizard_service_name }}"
+dropwizard_service_group_name: "{{ dropwizard_service_name }}"
+dropwizard_service_config_path: "/etc/{{ dropwizard_service_name }}"
+dropwizard_service_config_file: "{{ dropwizard_service_name }}.yml"
+dropwizard_service_init_path: "/etc/init.d/{{ dropwizard_service_name }}"
+dropwizard_service_java_opts: "-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/{{dropwizard_service_name}}/ -Xms128m -Xmx256m"
+dropwizard_service_init_config_source: "templates/dropwizard-service-init-script.j2"
+dropwizard_service_jar_target_path: "/opt/{{ dropwizard_service_name }}/{{ dropwizard_service_name }}.jar"
+dropwizard_service_enabled: true
+dropwizard_service_check: true
