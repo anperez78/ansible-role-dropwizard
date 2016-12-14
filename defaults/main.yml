@@ -9,3 +9,7 @@ dropwizard_service_init_config_source: "templates/dropwizard-service-init-script
 dropwizard_service_jar_target_path: "/opt/{{ dropwizard_service_name }}/{{ dropwizard_service_name }}.jar"
 dropwizard_service_enabled: true
 dropwizard_service_check: true
+artifactory_group_id: ''
+artifactory_artifact_id: ''
+artifactory_artifact_version: ''
+artifactory_repository_url: ''

@@ -4,6 +4,11 @@
      name: daemonize.x86_64
      state: present
 
+- name: Install dependency for maven_artifact
+  yum:
+    name: python-lxml
+    state: present
+
 - name: Ensure service group is created
   group:
     name: "{{ dropwizard_service_group_name }}"
@@ -30,13 +35,13 @@
     group: "{{ dropwizard_service_group_name }}"
     mode: 0755
 
-- name: Copy jar file to proper location
-  copy:
-    src: "{{ dropwizard_service_jar_origin_path }}"
+- name: Download artifact to proper location
+  maven_artifact:
+    group_id: "{{ artifactory_group_id }}"
+    artifact_id: "{{ artifactory_artifact_id }}"
+    version: "{{ artifactory_artifact_version }}"
+    repository_url: "{{ artifactory_repository_url }}"
     dest: "{{ dropwizard_service_jar_target_path }}"
-    owner: "{{ dropwizard_service_user_name }}"
-    group: "{{ dropwizard_service_group_name }}"
-    mode: 0640
 
 - name: Ensure config directory is created
   file:

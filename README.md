@@ -10,7 +10,6 @@ The variables that can be passed to this role and a brief description about them
 
     dropwizard_service_name: 'hello-world'                            # Name of your service/application
     dropwizard_service_config_source: 'templates/hello-world.yml.j2'  # Template for the configuration file for for your service/application
-    dropwizard_service_jar_origin_path: '/temp/hello-world.jar'       # Location of the JAR (dropwizard app) to be installed
 
     dropwizard_service_user_name: 'hello-world'                       # User of the service. By default *dropwizard_service_name*
     dropwizard_service_group_name: 'hello-world'                      # Group of the service. By default *dropwizard_service_name*
