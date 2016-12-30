@@ -40,6 +40,7 @@
     group_id: "{{ artifactory_group_id }}"
     artifact_id: "{{ artifactory_artifact_id }}"
     version: "{{ artifactory_artifact_version }}"
+    classifier: "{{ artifactory_artifact_classifier }}"
     repository_url: "{{ artifactory_repository_url }}"
     dest: "{{ dropwizard_service_jar_target_path }}"
 

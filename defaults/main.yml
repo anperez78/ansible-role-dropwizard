@@ -12,4 +12,5 @@ dropwizard_service_check: true
 artifactory_group_id: ''
 artifactory_artifact_id: ''
 artifactory_artifact_version: ''
+artifactory_artifact_classifier: ''
 artifactory_repository_url: ''
