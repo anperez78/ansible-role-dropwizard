@@ -44,6 +44,13 @@
     repository_url: "{{ artifactory_repository_url }}"
     dest: "{{ dropwizard_service_jar_target_path }}"
 
+- name: Run Drowizard db migrate
+  become: yes
+  become_user: "{{ dropwizard_service_user_name }}"
+  shell: "/usr/bin/java -jar {{ dropwizard_service_jar_target_path }} db migrate {{ dropwizard_service_config_path }}/{{dropwizard_service_config_file}}"
+  run_once: true
+  when: dropwizard_migrate_database|default(false)
+
 - name: Ensure config directory is created
   file:
     path: "{{ dropwizard_service_config_path }}"
