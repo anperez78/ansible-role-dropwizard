@@ -1,14 +1,29 @@
 ---
+# Name of the service.
+dropwizard_service_name: ''
+# User name of the service.
 dropwizard_service_user_name: "{{ dropwizard_service_name }}"
+# Group of the service.
 dropwizard_service_group_name: "{{ dropwizard_service_name }}"
+ # Configuration path.
 dropwizard_service_config_path: "/etc/{{ dropwizard_service_name }}"
+# Configuration file.
 dropwizard_service_config_file: "{{ dropwizard_service_name }}.yml"
+# Path and file for init script.
 dropwizard_service_init_path: "/etc/init.d/{{ dropwizard_service_name }}"
+# Java options.
 dropwizard_service_java_opts: "-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/{{dropwizard_service_name}}/ -Xms128m -Xmx256m"
+# Template for the init script.
 dropwizard_service_init_config_source: "templates/dropwizard-service-init-script.j2"
+# Target localtion for the JAR file.
 dropwizard_service_jar_target_path: "/opt/{{ dropwizard_service_name }}/{{ dropwizard_service_name }}.jar"
+# Template for the configuration file for for your service.
+dropwizard_service_config_source: ''
+ # By default it's set to true
 dropwizard_service_enabled: true
+ # By default it's set to true
 dropwizard_service_check: true
+ # By default it's set to true
 dropwizard_migrate_database: true
 artifactory_group_id: ''
 artifactory_artifact_id: ''
